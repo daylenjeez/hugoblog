@@ -12,9 +12,9 @@ theme = "paper"
 [menu]
 
   [[menu.main]]
-    identifier = "about"
-    name = "About"
-    url = "/about/"
+    identifier = "tags"
+    name = "Tags"
+    url = "/tags/"
     weight = 10
   [[menu.main]]
     identifier = "contact"
