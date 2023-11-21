@@ -2,10 +2,10 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Daylen&#39;s Blog</title>
-    <link>https://hugoblog-swart.vercel.app/</link>
+    <link>https://www.daylenjeez.com/</link>
     <description>Recent content on Daylen&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="https://hugoblog-swart.vercel.app/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://www.daylenjeez.com/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
