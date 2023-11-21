@@ -4,7 +4,6 @@ title = "Daylen's Blog"
 theme = "paper"
 
 [params]
-  # home page profile
   avatar = 'stussury@gmail.com'                 # gravatar email or image url
   name = 'DaylenJeez'
   bio = 'Still you gotta rise'
