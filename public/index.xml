@@ -9,11 +9,12 @@
     <lastBuildDate>Mon, 20 Nov 2023 22:36:39 +0800</lastBuildDate>
     <atom:link href="https://www.daylenjeez.com/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>My First Post</title>
+      <title>React Hooks 细粒度更新</title>
       <link>https://www.daylenjeez.com/posts/my-first-post/</link>
       <pubDate>Mon, 20 Nov 2023 22:36:39 +0800</pubDate>
       <guid>https://www.daylenjeez.com/posts/my-first-post/</guid>
-      <description>这是我的文章</description>
+      <description>前言 什么是细粒度更新？简单来说就是只更新需要更新的部分，而不是整个组件都更新。我们熟知的Vue就是细粒度更新，你无需关心你的组件是如何更新的，只需要关心你的数据是如何变化的，Vue会自动帮你更新组件，这也是Vue的优势之一。 而React则不同，React的更新是粗粒度的，也就是说，当你的组件的任何一个props或者state发生变化时，整个组件都会重新渲染，这也是在使用React时令人头疼的地方；接下来我们自己实现一个简单的细粒度更新的React Hooks；
+实现 useState </description>
     </item>
   </channel>
 </rss>

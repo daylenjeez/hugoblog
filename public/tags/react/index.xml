@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Daylen&#39;s Blog</title>
-    <link>https://www.daylenjeez.com/posts/</link>
-    <description>Recent content in Posts on Daylen&#39;s Blog</description>
+    <title>React on Daylen&#39;s Blog</title>
+    <link>https://www.daylenjeez.com/tags/react/</link>
+    <description>Recent content in React on Daylen&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 20 Nov 2023 22:36:39 +0800</lastBuildDate>
-    <atom:link href="https://www.daylenjeez.com/posts/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://www.daylenjeez.com/tags/react/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>React Hooks 细粒度更新</title>
       <link>https://www.daylenjeez.com/posts/my-first-post/</link>
