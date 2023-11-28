@@ -59,7 +59,7 @@
   
   
   
-  <meta name="description" content="前言 什么是细粒度更新？简单来说就是只更新需要更新的部分，而不是整个组件都更新。我们熟知的Vue就是细粒度更新，你无需关心你的组件是如何更新的，只需要关心你的数据是如何变化的，Vue会“自动追踪依赖”。 而React则不同，React的更新是粗粒度的，也就是说，当你的组件的任何一个props或者state发生变化时，整个组件都会重新渲染，这也是在使用sReact时令人头疼的地方；接下来我们自己实现一个简单的细粒度更新的 React Hooks；
+  <meta name="description" content="前言 什么是细粒度更新？简单来说就是只更新需要更新的部分，而不是整个组件都更新。我们熟知的Vue就是细粒度更新，你无需关心你的组件是如何更新的，只需要关心你的数据是如何变化的，Vue会“自动追踪依赖”。 而React则不同，React的更新是粗粒度的，也就是说，当你的组件的任何一个props或者state发生变化时，整个组件都会重新渲染，这也是在使用React时令人头疼的地方；接下来我们自己实现一个简单的细粒度更新的 React Hooks；
 实现 1. 简单实现useState function useState(state){ const getter = () =&gt; state; const setter = (newState) =&gt; state = newState; return [getter,setter] } useState接收一个value为参数,形成闭包（因为getter和setter都引用了state）； 用getter会返回闭包中state的值；setter会修改闭包中states的值； 使用方式如下：
 const [count,setCount] = useState(0); console.log(count()); // 0 setCount(1); console.log(count()); // 1 2. 简单实现useEffect 我们期望useEffect的行为是：
 立即执行：当useEffect执行后，立即执行回调函数；（与React Hooks的useEffect一致）； 依赖更新时执行：当依赖更新时，执行回调函数；（与React Hooks的useEffect一致）； 不需要显示指明依赖：当依赖更新时，自动执行回调函数；（与React Hooks不一致）； 期望具体行为如下：
@@ -120,7 +120,7 @@ const [count,setCount] = useState(0); //effect 1 useEffect(()=&gt;{ console.log(
   
   
   <meta itemprop="name" content="React Hooks 细粒度更新">
-<meta itemprop="description" content="前言 什么是细粒度更新？简单来说就是只更新需要更新的部分，而不是整个组件都更新。我们熟知的Vue就是细粒度更新，你无需关心你的组件是如何更新的，只需要关心你的数据是如何变化的，Vue会“自动追踪依赖”。 而React则不同，React的更新是粗粒度的，也就是说，当你的组件的任何一个props或者state发生变化时，整个组件都会重新渲染，这也是在使用sReact时令人头疼的地方；接下来我们自己实现一个简单的细粒度更新的 React Hooks；
+<meta itemprop="description" content="前言 什么是细粒度更新？简单来说就是只更新需要更新的部分，而不是整个组件都更新。我们熟知的Vue就是细粒度更新，你无需关心你的组件是如何更新的，只需要关心你的数据是如何变化的，Vue会“自动追踪依赖”。 而React则不同，React的更新是粗粒度的，也就是说，当你的组件的任何一个props或者state发生变化时，整个组件都会重新渲染，这也是在使用React时令人头疼的地方；接下来我们自己实现一个简单的细粒度更新的 React Hooks；
 实现 1. 简单实现useState function useState(state){ const getter = () =&gt; state; const setter = (newState) =&gt; state = newState; return [getter,setter] } useState接收一个value为参数,形成闭包（因为getter和setter都引用了state）； 用getter会返回闭包中state的值；setter会修改闭包中states的值； 使用方式如下：
 const [count,setCount] = useState(0); console.log(count()); // 0 setCount(1); console.log(count()); // 1 2. 简单实现useEffect 我们期望useEffect的行为是：
 立即执行：当useEffect执行后，立即执行回调函数；（与React Hooks的useEffect一致）； 依赖更新时执行：当依赖更新时，执行回调函数；（与React Hooks的useEffect一致）； 不需要显示指明依赖：当依赖更新时，自动执行回调函数；（与React Hooks不一致）； 期望具体行为如下：
@@ -130,7 +130,7 @@ const [count,setCount] = useState(0); //effect 1 useEffect(()=&gt;{ console.log(
 <meta itemprop="keywords" content="React," />
   
   <meta property="og:title" content="React Hooks 细粒度更新" />
-<meta property="og:description" content="前言 什么是细粒度更新？简单来说就是只更新需要更新的部分，而不是整个组件都更新。我们熟知的Vue就是细粒度更新，你无需关心你的组件是如何更新的，只需要关心你的数据是如何变化的，Vue会“自动追踪依赖”。 而React则不同，React的更新是粗粒度的，也就是说，当你的组件的任何一个props或者state发生变化时，整个组件都会重新渲染，这也是在使用sReact时令人头疼的地方；接下来我们自己实现一个简单的细粒度更新的 React Hooks；
+<meta property="og:description" content="前言 什么是细粒度更新？简单来说就是只更新需要更新的部分，而不是整个组件都更新。我们熟知的Vue就是细粒度更新，你无需关心你的组件是如何更新的，只需要关心你的数据是如何变化的，Vue会“自动追踪依赖”。 而React则不同，React的更新是粗粒度的，也就是说，当你的组件的任何一个props或者state发生变化时，整个组件都会重新渲染，这也是在使用React时令人头疼的地方；接下来我们自己实现一个简单的细粒度更新的 React Hooks；
 实现 1. 简单实现useState function useState(state){ const getter = () =&gt; state; const setter = (newState) =&gt; state = newState; return [getter,setter] } useState接收一个value为参数,形成闭包（因为getter和setter都引用了state）； 用getter会返回闭包中state的值；setter会修改闭包中states的值； 使用方式如下：
 const [count,setCount] = useState(0); console.log(count()); // 0 setCount(1); console.log(count()); // 1 2. 简单实现useEffect 我们期望useEffect的行为是：
 立即执行：当useEffect执行后，立即执行回调函数；（与React Hooks的useEffect一致）； 依赖更新时执行：当依赖更新时，执行回调函数；（与React Hooks的useEffect一致）； 不需要显示指明依赖：当依赖更新时，自动执行回调函数；（与React Hooks不一致）； 期望具体行为如下：
@@ -144,7 +144,7 @@ const [count,setCount] = useState(0); //effect 1 useEffect(()=&gt;{ console.log(
   
   <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="React Hooks 细粒度更新"/>
-<meta name="twitter:description" content="前言 什么是细粒度更新？简单来说就是只更新需要更新的部分，而不是整个组件都更新。我们熟知的Vue就是细粒度更新，你无需关心你的组件是如何更新的，只需要关心你的数据是如何变化的，Vue会“自动追踪依赖”。 而React则不同，React的更新是粗粒度的，也就是说，当你的组件的任何一个props或者state发生变化时，整个组件都会重新渲染，这也是在使用sReact时令人头疼的地方；接下来我们自己实现一个简单的细粒度更新的 React Hooks；
+<meta name="twitter:description" content="前言 什么是细粒度更新？简单来说就是只更新需要更新的部分，而不是整个组件都更新。我们熟知的Vue就是细粒度更新，你无需关心你的组件是如何更新的，只需要关心你的数据是如何变化的，Vue会“自动追踪依赖”。 而React则不同，React的更新是粗粒度的，也就是说，当你的组件的任何一个props或者state发生变化时，整个组件都会重新渲染，这也是在使用React时令人头疼的地方；接下来我们自己实现一个简单的细粒度更新的 React Hooks；
 实现 1. 简单实现useState function useState(state){ const getter = () =&gt; state; const setter = (newState) =&gt; state = newState; return [getter,setter] } useState接收一个value为参数,形成闭包（因为getter和setter都引用了state）； 用getter会返回闭包中state的值；setter会修改闭包中states的值； 使用方式如下：
 const [count,setCount] = useState(0); console.log(count()); // 0 setCount(1); console.log(count()); // 1 2. 简单实现useEffect 我们期望useEffect的行为是：
 立即执行：当useEffect执行后，立即执行回调函数；（与React Hooks的useEffect一致）； 依赖更新时执行：当依赖更新时，执行回调函数；（与React Hooks的useEffect一致）； 不需要显示指明依赖：当依赖更新时，自动执行回调函数；（与React Hooks不一致）； 期望具体行为如下：
@@ -273,8 +273,8 @@ const [count,setCount] = useState(0); //effect 1 useEffect(()=&gt;{ console.log(
   </header>
 
   <section><h2 id="前言">前言</h2>
-<p>  什么是细粒度更新？简单来说就是只更新需要更新的部分，而不是整个组件都更新。我们熟知的<code>Vue</code>就是细粒度更新，你无需关心你的组件是如何更新的，只需要关心你的数据是如何变化的，<em>Vue</em>会“自动追踪依赖”。
-  而<em>React</em>则不同，<em>React</em>的更新是粗粒度的，也就是说，当你的组件的任何一个<em>props</em>或者<em>state</em>发生变化时，整个组件都会重新渲染，这也是在使用<em>sReact</em>时令人头疼的地方；接下来我们自己实现一个简单的细粒度更新的 <em>React Hooks</em>；</p>
+<p>  什么是细粒度更新？简单来说就是只更新需要更新的部分，而不是整个组件都更新。我们熟知的<code>Vue</code>就是细粒度更新，你无需关心你的组件是如何更新的，只需要关心你的数据是如何变化的，<code>Vue</code>会“自动追踪依赖”。
+  而<code>React</code>则不同，<code>React</code>的更新是粗粒度的，也就是说，当你的组件的任何一个<code>props</code>或者<code>state</code>发生变化时，整个组件都会重新渲染，这也是在使用<code>React</code>时令人头疼的地方；接下来我们自己实现一个简单的细粒度更新的 <code>React Hooks</code>；</p>
 <h2 id="实现">实现</h2>
 <h3 id="1-简单实现usestate">1. 简单实现useState</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">useState</span>(<span style="color:#a6e22e">state</span>){
@@ -283,8 +283,8 @@ const [count,setCount] = useState(0); //effect 1 useEffect(()=&gt;{ console.log(
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> [<span style="color:#a6e22e">getter</span>,<span style="color:#a6e22e">setter</span>]
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><ol>
-<li><em>useState</em>接收一个value为参数,形成闭包（因为<em>getter</em>和<em>setter</em>都引用了<em>state</em>）；</li>
-<li>用<em>getter</em>会返回闭包中<em>state</em>的值；<em>setter</em>会修改闭包中<em>state</em>s的值；</li>
+<li><code>useState</code>接收一个value为参数,形成闭包（因为<code>getter</code>和<code>setter</code>都引用了<code>state</code>）；</li>
+<li>用<code>getter</code>会返回闭包中<code>state</code>的值；<code>setter</code>会修改闭包中<code>state</code>s的值；</li>
 </ol>
 <p>使用方式如下：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">count</span>,<span style="color:#a6e22e">setCount</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">useState</span>(<span style="color:#ae81ff">0</span>);
@@ -292,11 +292,11 @@ const [count,setCount] = useState(0); //effect 1 useEffect(()=&gt;{ console.log(
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">setCount</span>(<span style="color:#ae81ff">1</span>);
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">count</span>()); <span style="color:#75715e">// 1
 </span></span></span></code></pre></div><h3 id="2-简单实现useeffect">2. 简单实现useEffect</h3>
-<p>我们期望<em>useEffect</em>的行为是：</p>
+<p>我们期望<code>useEffect</code>的行为是：</p>
 <ol>
-<li><strong>立即执行</strong>：当<em>useEffect</em>执行后，立即执行回调函数；（与<em>React Hooks</em>的<em>useEffect</em>一致）；</li>
-<li><strong>依赖更新时执行</strong>：当依赖更新时，执行回调函数；（与<em>React Hooks</em>的<em>useEffect</em>一致）；</li>
-<li><strong>不需要显示指明依赖</strong>：当依赖更新时，自动执行回调函数；（与<em>React Hooks</em>不一致）；</li>
+<li><strong>立即执行</strong>：当<code>useEffect</code>执行后，立即执行回调函数；（与<code>React Hooks</code>的<code>useEffect</code>一致）；</li>
+<li><strong>依赖更新时执行</strong>：当依赖更新时，执行回调函数；（与<code>React Hooks</code>的<code>useEffect</code>一致）；</li>
+<li><strong>不需要显示指明依赖</strong>：当依赖更新时，自动执行回调函数；（与<code>React Hooks</code>不一致）；</li>
 </ol>
 <p>期望具体行为如下：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">count</span>,<span style="color:#a6e22e">setCount</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">useState</span>(<span style="color:#ae81ff">0</span>);
@@ -314,16 +314,16 @@ const [count,setCount] = useState(0); //effect 1 useEffect(()=&gt;{ console.log(
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">setCount</span>(<span style="color:#ae81ff">1</span>);<span style="color:#75715e">//3. 执行effect 1，打印 count is 1
 </span></span></span></code></pre></div><p>要实现如上效果我们要做的核心就是让<strong>useEffect和useState建立关系</strong> ，我们可以通过<strong>发布订阅</strong>来实现：</p>
 <ol>
-<li><strong>订阅</strong>：在<em>useEffect</em>回调中执行<em>useState</em>的<em>getter</em>时，该effect就订阅了该<em>getter</em>；</li>
-<li><strong>发布</strong>：当<em>useState</em>的<em>setter</em>执行时，就通知所有 订阅了该<em>getter</em>的<em>useEffect</em>回调函数 执行；</li>
+<li><strong>订阅</strong>：在<code>useEffect</code>回调中执行<code>useState</code>的<code>getter</code>时，该effect就订阅了该<code>getter</code>；</li>
+<li><strong>发布</strong>：当<code>useState</code>的<code>setter</code>执行时，就通知所有 订阅了该<code>getter</code>的<code>useEffect</code>回调函数 执行；</li>
 </ol>
-<p>而要建立关系，我们需要分别在<em>useState</em>和<em>useEffect</em> 中各自维护一个订阅列表和发布列表：</p>
+<p>而要建立关系，我们需要分别在<code>useState</code>和<code>useEffect</code> 中各自维护一个订阅列表和发布列表：</p>
 <ol>
-<li><em>useState</em>的<em>subs</em>：用来存储订阅该<em>state</em>的<em>effect</em>；</li>
-<li><em>useEffect</em>的<em>effect.deps</em>：用来存储<em>effect</em>订阅的<em>state</em>所对应的<em>subs</em>集合；</li>
+<li><code>useState</code>的<code>subs</code>：用来存储订阅该<code>state</code>的<code>effect</code>；</li>
+<li><code>useEffect</code>的<code>effect.deps</code>：用来存储<code>effect</code>订阅的<code>state</code>所对应的<code>subs</code>集合；</li>
 </ol>
 <h2 id="结论">结论</h2>
-<p>通过上面的代码我们可以很容易的实现一个细粒度更新的<em>React Hooks</em>，或许你会疑问为什么<em>React</em>自己不实现一个细粒度更新的<em>Hooks</em>呢？因为<em>React</em>是一个“应用级的框架” ，选择使用 Hooks 的设计方式是为了提供一种更简洁、可组合和易于理解的方式来处理组件的状态和副作用，而不是过于关注细粒度的更新；同时它具有很强的灵活性，你可以根据你的项目需求来选择是否实现细粒度更新，而不是强制性的实现细粒度更新，这也是<em>React</em>的灵活性所在。</p>
+<p>通过上面的代码我们可以很容易的实现一个细粒度更新的<code>React Hooks</code>，或许你会疑问为什么<code>React</code>自己不实现一个细粒度更新的<code>Hooks</code>呢？因为<code>React</code>是一个“应用级的框架” ，选择使用 Hooks 的设计方式是为了提供一种更简洁、可组合和易于理解的方式来处理组件的状态和副作用，而不是过于关注细粒度的更新；同时它具有很强的灵活性，你可以根据你的项目需求来选择是否实现细粒度更新，而不是强制性的实现细粒度更新，这也是<code>React</code>的灵活性所在。</p>
 </section>
 
   
