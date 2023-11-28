@@ -54,7 +54,7 @@ useEffect(()=>{
 setCount(1);//3. 执行effect 1，打印 count is 1
 ```
 
-要实现如上效果我们要做的核心就是让**useEffect和useState建立关系** ，我们可以通过**发布订阅**来实现：
+要实现如上效果我们要做的核心就是让`useEffect`和`useState`建立关系 ，我们可以通过**发布订阅**来实现：
 1. **订阅**：在`useEffect`回调中执行`useState`的`getter`时，该effect就订阅了该`getter`；
 2. **发布**：当`useState`的`setter`执行时，就通知所有 订阅了该`getter`的`useEffect`回调函数 执行；
 
