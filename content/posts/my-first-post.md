@@ -33,9 +33,9 @@ console.log(count()); // 1
 ### 2. 简单实现useEffect
 
 我们期望*useEffect*的行为是：
-1.立即执行：当*useEffect*执行后，立即执行回调函数；（与*React Hooks*的*useEffect*一致）；
-2.依赖更新时执行：当依赖更新时，执行回调函数；（与*React Hooks*的*useEffect*一致）；
-3.不需要显示指明依赖：当依赖更新时，自动执行回调函数；（与*React Hooks*不一致）；
+1. 立即执行：当*useEffect*执行后，立即执行回调函数；（与*React Hooks*的*useEffect*一致）；
+2. 依赖更新时执行：当依赖更新时，执行回调函数；（与*React Hooks*的*useEffect*一致）；
+3. 不需要显示指明依赖：当依赖更新时，自动执行回调函数；（与*React Hooks*不一致）；
 
 期望具体行为如下：
 ```javascript
