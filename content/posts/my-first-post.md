@@ -19,8 +19,8 @@ function useState(state){
 }
 ```
 
-1. `useState`接收一个value为参数,形成闭包（因为`getter`和`setter`都引用了`state`）；
-2. 用`getter`会返回闭包中`state`的值；`setter`会修改闭包中`state`s的值；
+1. `useState`接收一个value为参数，形成闭包（因为`getter`和`setter`都引用了`state`）；
+2. 用`getter`会返回闭包中`state`的值；`setter`会修改闭包中`state`的值；
 
 使用方式如下：
 ```javascript
@@ -63,7 +63,70 @@ setCount(1);//3. 执行effect 1，打印 count is 1
 1. `useState`的`subs`：用来存储订阅该`state`的`effect`；
 2. `useEffect`的`effect.deps`：用来存储`effect`订阅的`state`所对应的`subs`集合；
 
+![useState 与 useEffect 的订阅发布关系](image-1.png)
 
+```js
+function useEffect(callback){
+    //...
+    const effect = {
+      //用于执行 useEffect 的回调函数
+      execute,
+      //保存该 useEffect 依赖的 state 对应 subs 集合
+      deps:new Set()
+    }
+    //...
+}
+
+function useState(value){
+  // 保存订阅该 state 变化的 effect
+  const subs = new Set();
+  //...
+}
+```
+
+完整的``useEffect``实现如下
+
+```js
+function useEffect(callback){
+  const execute = () => {
+    //重制依赖
+    cleanup(effect);
+    //将当前 effect 推入栈顶
+    effectStack.push(effect);
+
+    try{
+      //执行回调
+      callback();
+    } finally{
+      // effect 出栈
+      effectStack.pop();
+    }
+  }
+
+  const effect = {
+    execute,
+    deps:new Set()
+  }
+
+  // 立即执行一次，建立发布订阅关系
+  execute();
+}
+```
+
+或许你看不懂上面的``useEffect``实现，我们可以先关注三个重要的细节：
+1. 在``callback``执行前调用``cleanup``清除所有“与该``effect``相关的订阅发布关系”，在执行时，会重建发布订阅关系；
+  ```js
+  function cleanup(effect){
+    //从该effect订阅的所有state对应subs中移除该effect
+    for(const subs of effect.deps){
+      subs.delete(effect)
+    }
+    // 从该effect依赖的多有 state 对应 subs 移除
+    effect.deps.clear();
+  }
+  ```
+  2. 在调用``state``的``getter``时，需要了解该``state``当前所处的的是哪个``effect``上下文（用于建立该``state``与``effect``的联系），因此在 callback 执行前将当前``effect``保存在栈 ``effectStack``的顶端，在``callback``执行后``effect``出栈。在 ``useState``的``getter``内部获取``effectStack``的栈顶``effect``即为“当前所处``effect``上下文”；
+  3. 在``useEffect``执行后内部会执行``excute``，首次建立订阅发布关系。这也是“**自动收集依赖**”的关键。
 
 ## 结论
 

@@ -14,7 +14,7 @@
       <pubDate>Mon, 20 Nov 2023 22:36:39 +0800</pubDate>
       <guid>https://www.daylenjeez.com/posts/my-first-post/</guid>
       <description>前言 什么是细粒度更新？简单来说就是只更新需要更新的部分，而不是整个组件都更新。我们熟知的Vue就是细粒度更新，你无需关心你的组件是如何更新的，只需要关心你的数据是如何变化的，Vue会“自动追踪依赖”。 而React则不同，React的更新是粗粒度的，也就是说，当你的组件的任何一个props或者state发生变化时，整个组件都会重新渲染，这也是在使用React时令人头疼的地方；接下来我们自己实现一个简单的细粒度更新的 React Hooks；
-实现 1. 简单实现useState function useState(state){ const getter = () =&amp;gt; state; const setter = (newState) =&amp;gt; state = newState; return [getter,setter] } useState接收一个value为参数,形成闭包（因为getter和setter都引用了state）； 用getter会返回闭包中state的值；setter会修改闭包中states的值； 使用方式如下：
+实现 1. 简单实现useState function useState(state){ const getter = () =&amp;gt; state; const setter = (newState) =&amp;gt; state = newState; return [getter,setter] } useState接收一个value为参数，形成闭包（因为getter和setter都引用了state）； 用getter会返回闭包中state的值；setter会修改闭包中state的值； 使用方式如下：
 const [count,setCount] = useState(0); console.log(count()); // 0 setCount(1); console.log(count()); // 1 2. 简单实现useEffect 我们期望useEffect的行为是：
 立即执行：当useEffect执行后，立即执行回调函数；（与React Hooks的useEffect一致）； 依赖更新时执行：当依赖更新时，执行回调函数；（与React Hooks的useEffect一致）； 不需要显示指明依赖：当依赖更新时，自动执行回调函数；（与React Hooks不一致）； 期望具体行为如下：
 const [count,setCount] = useState(0); //effect 1 useEffect(()=&amp;gt;{ console.log(`count is ${count()}`); //1.打印 count is 0 }); //effect 2 useEffect(()=&amp;gt;{ console.log(&amp;#39;nothing&amp;#39;); //2.</description>
