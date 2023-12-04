@@ -63,7 +63,7 @@ setCount(1);//3. 执行effect 1，打印 count is 1
 1. `useState`的`subs`：用来存储订阅该`state`的`effect`；
 2. `useEffect`的`effect.deps`：用来存储`effect`订阅的`state`所对应的`subs`集合；
 
-![useState 与 useEffect 的订阅发布关系](../FineGrainedReactivity.md)
+![useState 与 useEffect 的订阅发布关系](../FineGrainedReactivity-img1.png)
 
 ```js
 function useEffect(callback){
