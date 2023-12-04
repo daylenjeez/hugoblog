@@ -1,0 +1,434 @@
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html
+  class="not-ready lg:text-base"
+  style="--bg: #faf8f1"
+  lang="en-us"
+>
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, shrink-to-fit=no"
+  />
+
+  
+  <title>React Hooks 细粒度更新 - Daylen&#39;s Blog</title>
+
+  
+  <meta name="theme-color" />
+
+  
+  
+  
+  
+  <meta name="description" content="前言 什么是细粒度更新？简单来说就是只更新需要更新的部分，而不是整个组件都更新。我们熟知的Vue就是细粒度更新，你无需关心你的组件是如何更新的，只需要关心你的数据是如何变化的，Vue会“自动追踪依赖”。 而React则不同，React的更新是粗粒度的，也就是说，当你的组件的任何一个props或者state发生变化时，整个组件都会重新渲染，这也是在使用React时令人头疼的地方；接下来我们自己实现一个简单的细粒度更新的 React Hooks；
+实现 1. 简单实现useState function useState(state){ const getter = () =&gt; state; const setter = (newState) =&gt; state = newState; return [getter,setter] } useState接收一个value为参数，形成闭包（因为getter和setter都引用了state）； 用getter会返回闭包中state的值；setter会修改闭包中state的值； 使用方式如下：
+const [count,setCount] = useState(0); console.log(count()); // 0 setCount(1); console.log(count()); // 1 2. 简单实现useEffect 我们期望useEffect的行为是：
+立即执行：当useEffect执行后，立即执行回调函数；（与React Hooks的useEffect一致）； 依赖更新时执行：当依赖更新时，执行回调函数；（与React Hooks的useEffect一致）； 不需要显示指明依赖：当依赖更新时，自动执行回调函数；（与React Hooks不一致）； 期望具体行为如下：
+const [count,setCount] = useState(0); //effect 1 useEffect(()=&gt;{ console.log(`count is ${count()}`); //1.打印 count is 0 }); //effect 2 useEffect(()=&gt;{ console.log(&#39;nothing&#39;); //2." />
+  <meta name="author" content="DaylenJeez" />
+  
+
+  
+  
+  
+  
+  
+  
+  <link rel="preload stylesheet" as="style" href="https://www.daylenjeez.com/main.min.css" />
+
+  
+  
+  
+  
+  
+  <link rel="preload" as="image" href="https://www.daylenjeez.com/theme.png" />
+
+  
+  
+  
+  
+  <link rel="preload" as="image" href="https://www.gravatar.com/avatar/b1e4aa1c20d931a54d098c90be9df46c?s=160&amp;d=identicon" />
+  
+  
+
+  
+  
+  
+
+  
+  
+  <script
+    defer
+    src="https://www.daylenjeez.com/highlight.min.js"
+    onload="hljs.initHighlightingOnLoad();"
+  ></script>
+  
+
+  
+  
+  
+
+  
+  <link rel="icon" href="https://www.daylenjeez.com/favicon.ico" />
+  <link rel="apple-touch-icon" href="https://www.daylenjeez.com/apple-touch-icon.png" />
+
+  
+  <meta name="generator" content="Hugo 0.120.4">
+
+  
+  
+  
+  
+  
+  <meta itemprop="name" content="React Hooks 细粒度更新">
+<meta itemprop="description" content="前言 什么是细粒度更新？简单来说就是只更新需要更新的部分，而不是整个组件都更新。我们熟知的Vue就是细粒度更新，你无需关心你的组件是如何更新的，只需要关心你的数据是如何变化的，Vue会“自动追踪依赖”。 而React则不同，React的更新是粗粒度的，也就是说，当你的组件的任何一个props或者state发生变化时，整个组件都会重新渲染，这也是在使用React时令人头疼的地方；接下来我们自己实现一个简单的细粒度更新的 React Hooks；
+实现 1. 简单实现useState function useState(state){ const getter = () =&gt; state; const setter = (newState) =&gt; state = newState; return [getter,setter] } useState接收一个value为参数，形成闭包（因为getter和setter都引用了state）； 用getter会返回闭包中state的值；setter会修改闭包中state的值； 使用方式如下：
+const [count,setCount] = useState(0); console.log(count()); // 0 setCount(1); console.log(count()); // 1 2. 简单实现useEffect 我们期望useEffect的行为是：
+立即执行：当useEffect执行后，立即执行回调函数；（与React Hooks的useEffect一致）； 依赖更新时执行：当依赖更新时，执行回调函数；（与React Hooks的useEffect一致）； 不需要显示指明依赖：当依赖更新时，自动执行回调函数；（与React Hooks不一致）； 期望具体行为如下：
+const [count,setCount] = useState(0); //effect 1 useEffect(()=&gt;{ console.log(`count is ${count()}`); //1.打印 count is 0 }); //effect 2 useEffect(()=&gt;{ console.log(&#39;nothing&#39;); //2."><meta itemprop="datePublished" content="2023-11-20T22:36:39+08:00" />
+<meta itemprop="dateModified" content="2023-11-20T22:36:39+08:00" />
+<meta itemprop="wordCount" content="195">
+<meta itemprop="keywords" content="React," />
+  
+  <meta property="og:title" content="React Hooks 细粒度更新" />
+<meta property="og:description" content="前言 什么是细粒度更新？简单来说就是只更新需要更新的部分，而不是整个组件都更新。我们熟知的Vue就是细粒度更新，你无需关心你的组件是如何更新的，只需要关心你的数据是如何变化的，Vue会“自动追踪依赖”。 而React则不同，React的更新是粗粒度的，也就是说，当你的组件的任何一个props或者state发生变化时，整个组件都会重新渲染，这也是在使用React时令人头疼的地方；接下来我们自己实现一个简单的细粒度更新的 React Hooks；
+实现 1. 简单实现useState function useState(state){ const getter = () =&gt; state; const setter = (newState) =&gt; state = newState; return [getter,setter] } useState接收一个value为参数，形成闭包（因为getter和setter都引用了state）； 用getter会返回闭包中state的值；setter会修改闭包中state的值； 使用方式如下：
+const [count,setCount] = useState(0); console.log(count()); // 0 setCount(1); console.log(count()); // 1 2. 简单实现useEffect 我们期望useEffect的行为是：
+立即执行：当useEffect执行后，立即执行回调函数；（与React Hooks的useEffect一致）； 依赖更新时执行：当依赖更新时，执行回调函数；（与React Hooks的useEffect一致）； 不需要显示指明依赖：当依赖更新时，自动执行回调函数；（与React Hooks不一致）； 期望具体行为如下：
+const [count,setCount] = useState(0); //effect 1 useEffect(()=&gt;{ console.log(`count is ${count()}`); //1.打印 count is 0 }); //effect 2 useEffect(()=&gt;{ console.log(&#39;nothing&#39;); //2." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.daylenjeez.com/posts/finegrainedreactivity/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-11-20T22:36:39+08:00" />
+<meta property="article:modified_time" content="2023-11-20T22:36:39+08:00" />
+
+
+  
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="React Hooks 细粒度更新"/>
+<meta name="twitter:description" content="前言 什么是细粒度更新？简单来说就是只更新需要更新的部分，而不是整个组件都更新。我们熟知的Vue就是细粒度更新，你无需关心你的组件是如何更新的，只需要关心你的数据是如何变化的，Vue会“自动追踪依赖”。 而React则不同，React的更新是粗粒度的，也就是说，当你的组件的任何一个props或者state发生变化时，整个组件都会重新渲染，这也是在使用React时令人头疼的地方；接下来我们自己实现一个简单的细粒度更新的 React Hooks；
+实现 1. 简单实现useState function useState(state){ const getter = () =&gt; state; const setter = (newState) =&gt; state = newState; return [getter,setter] } useState接收一个value为参数，形成闭包（因为getter和setter都引用了state）； 用getter会返回闭包中state的值；setter会修改闭包中state的值； 使用方式如下：
+const [count,setCount] = useState(0); console.log(count()); // 0 setCount(1); console.log(count()); // 1 2. 简单实现useEffect 我们期望useEffect的行为是：
+立即执行：当useEffect执行后，立即执行回调函数；（与React Hooks的useEffect一致）； 依赖更新时执行：当依赖更新时，执行回调函数；（与React Hooks的useEffect一致）； 不需要显示指明依赖：当依赖更新时，自动执行回调函数；（与React Hooks不一致）； 期望具体行为如下：
+const [count,setCount] = useState(0); //effect 1 useEffect(()=&gt;{ console.log(`count is ${count()}`); //1.打印 count is 0 }); //effect 2 useEffect(()=&gt;{ console.log(&#39;nothing&#39;); //2."/>
+
+  
+  
+  
+  <link rel="canonical" href="https://www.daylenjeez.com/posts/finegrainedreactivity/" />
+  
+  
+</head>
+
+  <body class="text-black duration-200 ease-out dark:text-white">
+    <header class="mx-auto flex h-[4.5rem] max-w-3xl px-8 lg:justify-center">
+  <div class="relative z-50 mr-auto flex items-center">
+    <a
+      class="-translate-x-[1px] -translate-y-[1px] text-2xl font-semibold"
+      href="https://www.daylenjeez.com"
+      >Daylen&#39;s Blog</a
+    >
+    <div
+      class="btn-dark text-[0] ml-4 h-6 w-6 shrink-0 cursor-pointer [background:url(./theme.png)_left_center/_auto_theme('spacing.6')_no-repeat] [transition:_background-position_0.4s_steps(5)] dark:[background-position:right]"
+      role="button"
+      aria-label="Dark"
+    ></div>
+  </div>
+
+  <div
+    class="btn-menu relative z-50 -mr-8 flex h-[4.5rem] w-[5rem] shrink-0 cursor-pointer flex-col items-center justify-center gap-2.5 lg:hidden"
+    role="button"
+    aria-label="Menu"
+  ></div>
+
+  
+
+  <script>
+    
+    const htmlClass = document.documentElement.classList;
+    setTimeout(() => {
+      htmlClass.remove('not-ready');
+    }, 10);
+
+    
+    const btnMenu = document.querySelector('.btn-menu');
+    btnMenu.addEventListener('click', () => {
+      htmlClass.toggle('open');
+    });
+
+    
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    const lightBg = '#faf8f1'.replace(/"/g, '');
+    const setDark = (isDark) => {
+      metaTheme.setAttribute('content', isDark ? '#000' : lightBg);
+      htmlClass[isDark ? 'add' : 'remove']('dark');
+      localStorage.setItem('dark', isDark);
+    };
+
+    
+    const darkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    if (htmlClass.contains('dark')) {
+      setDark(true);
+    } else {
+      const darkVal = localStorage.getItem('dark');
+      setDark(darkVal ? darkVal === 'true' : darkScheme.matches);
+    }
+
+    
+    darkScheme.addEventListener('change', (event) => {
+      setDark(event.matches);
+    });
+
+    
+    const btnDark = document.querySelector('.btn-dark');
+    btnDark.addEventListener('click', () => {
+      setDark(localStorage.getItem('dark') !== 'true');
+    });
+  </script>
+
+  <div
+    class="nav-wrapper fixed inset-x-0 top-full z-40 flex h-full select-none flex-col justify-center pb-16 duration-200 dark:bg-black lg:static lg:h-auto lg:flex-row lg:!bg-transparent lg:pb-0 lg:transition-none"
+  >
+    
+    
+    <nav class="lg:ml-12 lg:flex lg:flex-row lg:items-center lg:space-x-6">
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/contact/"
+        >Contact</a
+      >
+      
+      <a
+        class="block text-center text-2xl leading-[5rem] lg:text-base lg:font-normal"
+        href="/tags/"
+        >Tags</a
+      >
+      
+    </nav>
+    
+
+    
+  </div>
+</header>
+
+
+    <main
+      class="prose prose-neutral relative mx-auto min-h-[calc(100%-9rem)] max-w-3xl px-8 pb-16 pt-12 dark:prose-invert"
+    >
+      
+
+<article>
+  <header class="mb-16">
+    <h1 class="!my-0 pb-2.5">React Hooks 细粒度更新</h1>
+
+    
+    <div class="text-sm antialiased opacity-60">
+      
+      <time>Nov 20, 2023</time>
+      
+      
+      
+      
+    </div>
+    
+  </header>
+
+  <section><h2 id="前言">前言</h2>
+<p>  什么是细粒度更新？简单来说就是只更新需要更新的部分，而不是整个组件都更新。我们熟知的<code>Vue</code>就是细粒度更新，你无需关心你的组件是如何更新的，只需要关心你的数据是如何变化的，<code>Vue</code>会“自动追踪依赖”。
+  而<code>React</code>则不同，<code>React</code>的更新是粗粒度的，也就是说，当你的组件的任何一个<code>props</code>或者<code>state</code>发生变化时，整个组件都会重新渲染，这也是在使用<code>React</code>时令人头疼的地方；接下来我们自己实现一个简单的细粒度更新的 <code>React Hooks</code>；</p>
+<h2 id="实现">实现</h2>
+<h3 id="1-简单实现usestate">1. 简单实现useState</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">useState</span>(<span style="color:#a6e22e">state</span>){
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">getter</span> <span style="color:#f92672">=</span> () =&gt; <span style="color:#a6e22e">state</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">setter</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">newState</span>) =&gt; <span style="color:#a6e22e">state</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">newState</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> [<span style="color:#a6e22e">getter</span>,<span style="color:#a6e22e">setter</span>]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol>
+<li><code>useState</code>接收一个value为参数，形成闭包（因为<code>getter</code>和<code>setter</code>都引用了<code>state</code>）；</li>
+<li>用<code>getter</code>会返回闭包中<code>state</code>的值；<code>setter</code>会修改闭包中<code>state</code>的值；</li>
+</ol>
+<p>使用方式如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">count</span>,<span style="color:#a6e22e">setCount</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">useState</span>(<span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">count</span>()); <span style="color:#75715e">// 0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">setCount</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#a6e22e">count</span>()); <span style="color:#75715e">// 1
+</span></span></span></code></pre></div><h3 id="2-简单实现useeffect">2. 简单实现useEffect</h3>
+<p>我们期望<code>useEffect</code>的行为是：</p>
+<ol>
+<li><strong>立即执行</strong>：当<code>useEffect</code>执行后，立即执行回调函数；（与<code>React Hooks</code>的<code>useEffect</code>一致）；</li>
+<li><strong>依赖更新时执行</strong>：当依赖更新时，执行回调函数；（与<code>React Hooks</code>的<code>useEffect</code>一致）；</li>
+<li><strong>不需要显示指明依赖</strong>：当依赖更新时，自动执行回调函数；（与<code>React Hooks</code>不一致）；</li>
+</ol>
+<p>期望具体行为如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> [<span style="color:#a6e22e">count</span>,<span style="color:#a6e22e">setCount</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">useState</span>(<span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//effect 1
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">useEffect</span>(()=&gt;{
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">`count is </span><span style="color:#e6db74">${</span><span style="color:#a6e22e">count</span>()<span style="color:#e6db74">}</span><span style="color:#e6db74">`</span>); <span style="color:#75715e">//1.打印 count is 0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//effect 2
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#a6e22e">useEffect</span>(()=&gt;{
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>(<span style="color:#e6db74">&#39;nothing&#39;</span>); <span style="color:#75715e">//2.打印 nothing
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>});
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">setCount</span>(<span style="color:#ae81ff">1</span>);<span style="color:#75715e">//3. 执行effect 1，打印 count is 1
+</span></span></span></code></pre></div><p>要实现如上效果我们要做的核心就是让<code>useEffect</code>和<code>useState</code>建立关系 ，我们可以通过<strong>发布订阅</strong>来实现：</p>
+<ol>
+<li><strong>订阅</strong>：在<code>useEffect</code>回调中执行<code>useState</code>的<code>getter</code>时，该effect就订阅了该<code>getter</code>；</li>
+<li><strong>发布</strong>：当<code>useState</code>的<code>setter</code>执行时，就通知所有 订阅了该<code>getter</code>的<code>useEffect</code>回调函数 执行；</li>
+</ol>
+<p>而要建立关系，我们需要分别在<code>useState</code>和<code>useEffect</code> 中各自维护一个订阅列表和发布列表：</p>
+<ol>
+<li><code>useState</code>的<code>subs</code>：用来存储订阅该<code>state</code>的<code>effect</code>；</li>
+<li><code>useEffect</code>的<code>effect.deps</code>：用来存储<code>effect</code>订阅的<code>state</code>所对应的<code>subs</code>集合；</li>
+</ol>
+<p><img src="../FineGrainedReactivity.md" alt="useState 与 useEffect 的订阅发布关系"></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">useEffect</span>(<span style="color:#a6e22e">callback</span>){
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">effect</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">//用于执行 useEffect 的回调函数
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>      <span style="color:#a6e22e">execute</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">//保存该 useEffect 依赖的 state 对应 subs 集合
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>      <span style="color:#a6e22e">deps</span><span style="color:#f92672">:</span><span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Set</span>()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">useState</span>(<span style="color:#a6e22e">value</span>){
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 保存订阅该 state 变化的 effect
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">subs</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Set</span>();
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">//...
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><p>完整的<code>useEffect</code>实现如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">useEffect</span>(<span style="color:#a6e22e">callback</span>){
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">execute</span> <span style="color:#f92672">=</span> () =&gt; {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//重制依赖
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">cleanup</span>(<span style="color:#a6e22e">effect</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//将当前 effect 推入栈顶
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">effectStack</span>.<span style="color:#a6e22e">push</span>(<span style="color:#a6e22e">effect</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>{
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">//执行回调
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>      <span style="color:#a6e22e">callback</span>();
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">finally</span>{
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// effect 出栈
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>      <span style="color:#a6e22e">effectStack</span>.<span style="color:#a6e22e">pop</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">effect</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">execute</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">deps</span><span style="color:#f92672">:</span><span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Set</span>()
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 立即执行一次，建立发布订阅关系
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">execute</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>我们可以先关注三个重要的细节：</p>
+<ol>
+<li>在<code>callback</code>执行前调用<code>cleanup</code>清除所有“与该<code>effect</code>相关的订阅发布关系”，在执行时，会重建发布订阅关系；</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">cleanup</span>(<span style="color:#a6e22e">effect</span>){
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">//从该effect订阅的所有state对应subs中移除该effect
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">const</span> <span style="color:#a6e22e">subs</span> <span style="color:#66d9ef">of</span> <span style="color:#a6e22e">effect</span>.<span style="color:#a6e22e">deps</span>){
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">subs</span>.<span style="color:#66d9ef">delete</span>(<span style="color:#a6e22e">effect</span>)
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 从该effect依赖的多有 state 对应 subs 移除
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">effect</span>.<span style="color:#a6e22e">deps</span>.<span style="color:#a6e22e">clear</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol start="2">
+<li>在调用<code>state</code>的<code>getter</code>时，需要了解该<code>state</code>当前所处的的是哪个<code>effect</code>上下文（用于建立该<code>state</code>与<code>effect</code>的联系），因此在 callback 执行前将当前<code>effect</code>保存在栈 <code>effectStack</code>的顶端，在<code>callback</code>执行后<code>effect</code>出栈。在 <code>useState</code>的<code>getter</code>内部获取<code>effectStack</code>的栈顶<code>effect</code>即为“当前所处<code>effect</code>上下文”；</li>
+<li>在<code>useEffect</code>执行后内部会执行<code>excute</code>，首次建立订阅发布关系。这也是“<strong>自动收集依赖</strong>”的关键。</li>
+</ol>
+<h2 id="结论">结论</h2>
+<p>通过上面的代码我们可以很容易的实现一个细粒度更新的<code>React Hooks</code>，或许你会疑问为什么<code>React</code>自己不实现一个细粒度更新的<code>Hooks</code>呢？因为<code>React</code>是一个“应用级的框架” ，选择使用 Hooks 的设计方式是为了提供一种更简洁、可组合和易于理解的方式来处理组件的状态和副作用，而不是过于关注细粒度的更新；同时它具有很强的灵活性，你可以根据你的项目需求来选择是否实现细粒度更新，而不是强制性的实现细粒度更新，这也是<code>React</code>的灵活性所在。</p>
+</section>
+
+  
+  
+  <footer class="mt-12 flex flex-wrap">
+     
+    <a class="mb-1.5 mr-1.5 rounded-lg bg-black/[3%] px-5 py-1.5 no-underline dark:bg-white/[8%]"
+       href="https://www.daylenjeez.com/tags/react">React</a>
+    
+  </footer>
+  
+
+  
+  
+  
+  
+  
+
+  
+  
+
+  
+  
+
+  
+  
+</article>
+
+
+    </main>
+
+    <footer
+  class="opaco mx-auto flex h-[4.5rem] max-w-3xl items-center px-8 text-[0.9em] opacity-60"
+>
+  <div class="mr-auto">
+    &copy; 2023
+    <a class="link" href="https://www.daylenjeez.com">Daylen&#39;s Blog</a>
+  </div>
+  
+  <a
+    class="link"
+    href="https://github.com/nanxiaobei/hugo-paper"
+    rel="noopener"
+    target="_blank"
+    >✎ Paper</a
+  >
+</footer>
+
+  </body>
+</html>
