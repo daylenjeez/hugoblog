@@ -63,7 +63,7 @@ setCount(1);//3. 执行effect 1，打印 count is 1
 1. `useState`的`subs`：用来存储订阅该`state`的`effect`；
 2. `useEffect`的`effect.deps`：用来存储`effect`订阅的`state`所对应的`subs`集合；
 
-![useState 与 useEffect 的订阅发布关系](image-1.png)
+![useState 与 useEffect 的订阅发布关系](image.png)
 
 ```js
 function useEffect(callback){
@@ -84,7 +84,7 @@ function useState(value){
 }
 ```
 
-完整的``useEffect``实现如下
+完整的``useEffect``实现如下：
 
 ```js
 function useEffect(callback){
@@ -113,7 +113,7 @@ function useEffect(callback){
 }
 ```
 
-或许你看不懂上面的``useEffect``实现，我们可以先关注三个重要的细节：
+我们可以先关注三个重要的细节：
 1. 在``callback``执行前调用``cleanup``清除所有“与该``effect``相关的订阅发布关系”，在执行时，会重建发布订阅关系；
   ```js
   function cleanup(effect){

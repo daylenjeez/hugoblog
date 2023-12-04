@@ -322,7 +322,7 @@ const [count,setCount] = useState(0); //effect 1 useEffect(()=&gt;{ console.log(
 <li><code>useState</code>的<code>subs</code>：用来存储订阅该<code>state</code>的<code>effect</code>；</li>
 <li><code>useEffect</code>的<code>effect.deps</code>：用来存储<code>effect</code>订阅的<code>state</code>所对应的<code>subs</code>集合；</li>
 </ol>
-<p><img src="image-1.png" alt="useState 与 useEffect 的订阅发布关系"></p>
+<p><img src="image.png" alt="useState 与 useEffect 的订阅发布关系"></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">useEffect</span>(<span style="color:#a6e22e">callback</span>){
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">//...
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">effect</span> <span style="color:#f92672">=</span> {
@@ -339,7 +339,7 @@ const [count,setCount] = useState(0); //effect 1 useEffect(()=&gt;{ console.log(
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">subs</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Set</span>();
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e">//...
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
-</span></span></code></pre></div><p>完整的<code>useEffect</code>实现如下</p>
+</span></span></code></pre></div><p>完整的<code>useEffect</code>实现如下：</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-js" data-lang="js"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">useEffect</span>(<span style="color:#a6e22e">callback</span>){
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">const</span> <span style="color:#a6e22e">execute</span> <span style="color:#f92672">=</span> () =&gt; {
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">//重制依赖
@@ -364,7 +364,7 @@ const [count,setCount] = useState(0); //effect 1 useEffect(()=&gt;{ console.log(
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 立即执行一次，建立发布订阅关系
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">execute</span>();
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>或许你看不懂上面的<code>useEffect</code>实现，我们可以先关注三个重要的细节：</p>
+</span></span></code></pre></div><p>我们可以先关注三个重要的细节：</p>
 <ol>
 <li>在<code>callback</code>执行前调用<code>cleanup</code>清除所有“与该<code>effect</code>相关的订阅发布关系”，在执行时，会重建发布订阅关系；</li>
 </ol>
