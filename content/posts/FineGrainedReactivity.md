@@ -176,80 +176,80 @@ function subscribe(effect,subs){
 
 ```js
 // 保存effect调用栈
-const effectStack = [];
+  const effectStack = [];
 
-function subscribe(effect,subs){
-  // 订阅关系建立
-  subs.add(effect);
-  // 依赖关系建立
-  effect.deps.add(subs);
-}
-
-function cleanup(effect){
-  // 从 effect 订阅的所有 state 对应的 subs 中移除该effect
-  for(const subs of effect.deps){
-    subs.delete(effect);
+  function subscribe(effect,subs){
+    // 订阅关系建立
+    subs.add(effect);
+    // 依赖关系建立
+    effect.deps.add(subs);
   }
 
-  //将该 effect 依赖的所有 state 对应的 subs 移除
-  effect.deps.clear();
-}
-
-function useState(value){
-  // 保存订阅该 state 变化的 effect
-  const subs = new Set();
-
-  const getter = () => {
-    // 获取当前上下文的effect
-    const effect = effectStack.at(-1);
-    if(effect){
-      // 建立订阅发布关系
-      subscribe(effect,subs);
+  function cleanup(effect){
+    // 从 effect 订阅的所有 state 对应的 subs 中移除该effect
+    for(const subs of effect.deps){
+      subs.delete(effect);
     }
-    return value;
-  };
 
-  const setter = (nextValue) => {
-    value = nextValue;
-    // 通知所有订阅该 state 变化的 effect 执行
-    for(const effect of [...subs]){
-      effect.excute();
+    //将该 effect 依赖的所有 state 对应的 subs 移除
+    effect.deps.clear();
+  }
+
+  function useState(value){
+    // 保存订阅该 state 变化的 effect
+    const subs = new Set();
+
+    const getter = () => {
+      // 获取当前上下文的effect
+      const effect = effectStack.at(-1);
+      if(effect){
+        // 建立订阅发布关系
+        subscribe(effect,subs);
+      }
+      return value;
+    };
+
+    const setter = (nextValue) => {
+      value = nextValue;
+      // 通知所有订阅该 state 变化的 effect 执行
+      for(const effect of [...subs]){
+        effect.excute();
+      }
+    };
+
+    return [getter,setter];
+  }
+
+  function useEffect(callback){
+    const excute = ()=>{
+      // 重置依赖
+      cleanup(effect);
+      // 将当前 effect 推入栈顶
+      effectStack.push(effect);
     }
-  };
 
-  return [getter,setter];
-}
+    try{
+      excute()
+    }finally{
+      //effect 出栈
+      effectState.pop();
+    }
+    
+    const effect = {
+      excute,
+      deps:new Set()
+    }
 
-function useEffect(callback){
-  const excute = ()=>{
-    // 重置依赖
-    cleanup(effect);
-    // 将当前 effect 推入栈顶
-    effectStack.push(effect);
+    // 立即执行一次，建立订阅发布关系
+    excute();
   }
 
-  try{
-    excute()
-  }finally{
-    //effect 出栈
-    effectState.pop();
+  function useMemo(callback){
+    const [s,set] = useState();
+    //首次执行callback, 初始化value
+    useEffect(()=>set(callback()));
+    return s;
   }
-  
-  const effect = {
-    excute,
-    deps:new Set()
-  }
-
-  // 立即执行一次，建立订阅发布关系
-  excute();
-}
-
-function useMemo(callback){
-  const [s,set] = useState();
-  //首次执行callback, 初始化value
-  useEffect(()=>set(callback()));
-  return s;
-}
 ```
 
 ## 结论
