@@ -6,7 +6,7 @@ tags = ["React"]
 
 ## 前言
 &nbsp;&nbsp;什么是细粒度更新？简单来说就是只更新需要更新的部分，而不是整个组件都更新。我们熟知的`Vue`就是细粒度更新，你无需关心你的组件是如何更新的，只需要关心你的数据是如何变化的，`Vue`会“自动追踪依赖”。
-&nbsp;&nbsp;而`React`则不同，`React`的更新是粗粒度的，也就是说，当你的组件的任何一个`props`或者`state`发生变化时，整个组件都会重新渲染，这也是在使用`React`时令人头疼的地方；接下来我们自己实现一个简单的细粒度更新的 `React Hooks`；
+&nbsp;&nbsp;而`React`则不同，`React`的更新是粗粒度的，也就是说，当你组件的任何一个`props`或者`state`发生变化时，整个组件都会重新渲染，这也是在使用`React`时令人头疼的地方；接下来我们简单实现一个细粒度更新的 `React Hooks`；
 
 ## 实现
 
@@ -84,7 +84,7 @@ function useState(value){
 }
 ```
 
-完整的``useEffect``实现如下：
+### 完整实现useEffect
 
 ```js
 function useEffect(callback){
@@ -127,6 +127,39 @@ function useEffect(callback){
   ```
   2. 在调用``state``的``getter``时，需要了解该``state``当前所处的的是哪个``effect``上下文（用于建立该``state``与``effect``的联系），因此在 callback 执行前将当前``effect``保存在栈 ``effectStack``的顶端，在``callback``执行后``effect``出栈。在 ``useState``的``getter``内部获取``effectStack``的栈顶``effect``即为“当前所处``effect``上下文”；
   3. 在``useEffect``执行后内部会执行``excute``，首次建立订阅发布关系。这也是“**自动收集依赖**”的关键。
+
+### 完整实现useState
+```js
+  function useState(){
+   // 保存订阅该 state 变化的 effect
+   const subs = new Set();
+
+   const getter = ()=>{
+    // 获取当前上下文的effect
+    const effect = effectStack[effectStack.length - 1];
+    if(effect){//判断是否处于某个effect的上下文中
+      // 建立订阅发布关系
+      subscribe(effect,subs);
+    }
+    return value;
+   }
+   const setter = (nextValue) =>{
+    value = nextValue;
+    // 通知所有订阅该 state 变化的effect执行
+    for(const effect of [...subs]){
+      effect.excute();
+    }
+   }
+   return [getter,setter];
+}
+
+function subscribe(effect,subs){
+  //订阅关系建立
+  subs.add(effect);
+  //依赖关系建立
+  effect.deps.add(subs);
+}
+```
 
 ## 结论
 
