@@ -161,6 +161,97 @@ function subscribe(effect,subs){
 }
 ```
 
+### 完整实现useMemo
+
+```js
+  function useMemo(callback){
+    const [s,set] = useState();
+    //首次执行callback，建立回调中 state 的订阅发布关系
+    useEffect(()=>set(callback()));
+    return s;
+  }
+```
+
+### 最终完整代码
+
+```js
+// 保存effect调用栈
+const effectStack = [];
+
+function subscribe(effect,subs){
+  // 订阅关系建立
+  subs.add(effect);
+  // 依赖关系建立
+  effect.deps.add(subs);
+}
+
+function cleanup(effect){
+  // 从 effect 订阅的所有 state 对应的 subs 中移除该effect
+  for(const subs of effect.deps){
+    subs.delete(effect);
+  }
+
+  //将该 effect 依赖的所有 state 对应的 subs 移除
+  effect.deps.clear();
+}
+
+function useState(value){
+  // 保存订阅该 state 变化的 effect
+  const subs = new Set();
+
+  const getter = () => {
+    // 获取当前上下文的effect
+    const effect = effectStack.at(-1);
+    if(effect){
+      // 建立订阅发布关系
+      subscribe(effect,subs);
+    }
+    return value;
+  };
+
+  const setter = (nextValue) => {
+    value = nextValue;
+    // 通知所有订阅该 state 变化的 effect 执行
+    for(const effect of [...subs]){
+      effect.excute();
+    }
+  };
+
+  return [getter,setter];
+}
+
+function useEffect(callback){
+  const excute = ()=>{
+    // 重置依赖
+    cleanup(effect);
+    // 将当前 effect 推入栈顶
+    effectStack.push(effect);
+  }
+
+  try{
+    excute()
+  }finally{
+    //effect 出栈
+    effectState.pop();
+  }
+  
+  const effect = {
+    excute,
+    deps:new Set()
+  }
+
+  // 立即执行一次，建立订阅发布关系
+  excute();
+}
+
+function useMemo(callback){
+  const [s,set] = useState();
+  //首次执行callback, 初始化value
+  useEffect(()=>set(callback()));
+  return s;
+}
+```
+
 ## 结论
 
 通过上面的代码我们可以很容易的实现一个细粒度更新的`React Hooks`，或许你会疑问为什么`React`自己不实现一个细粒度更新的`Hooks`呢？因为`React`是一个“应用级的框架” ，选择使用 Hooks 的设计方式是为了提供一种更简洁、可组合和易于理解的方式来处理组件的状态和副作用，而不是过于关注细粒度的更新；同时它具有很强的灵活性，你可以根据你的项目需求来选择是否实现细粒度更新，而不是强制性的实现细粒度更新，这也是`React`的灵活性所在。
